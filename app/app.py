@@ -5,10 +5,6 @@ from tensorflow.keras.models import load_model
 import matplotlib.pyplot as plt
 import json
 
-# =========================
-# CONFIGURATION
-# =========================
-
 MODEL_PATH = "../models/cnn_defect_classifier.keras"
 IMG_SIZE = 128
 CONFIDENCE_THRESHOLD = 0.6
@@ -25,20 +21,11 @@ ALL_CLASSES = [
     "water_spot",
     "welding_line"
 ]
-
-# =========================
-# PAGE CONFIG
-# =========================
-
 st.set_page_config(
     page_title="ANALYSE DES DEFAUTS METALLIQUES",
     page_icon="🧠",
     layout="wide"
 )
-
-# =========================
-# CSS GLOBAL
-# =========================
 
 st.markdown("""
 <style>
@@ -79,54 +66,35 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# =========================
-# LOAD MODEL
-# =========================
-
+# CHARGEMENT DU MODELE
 @st.cache_resource
 def load_cnn_model():
     model = load_model(MODEL_PATH)
     assert model.input_shape == (None, IMG_SIZE, IMG_SIZE, 1)
     return model
-
 model = load_cnn_model()
-
-# =========================
-# SIDEBAR
-# =========================
 
 with st.sidebar:
     st.header("⚙️ Paramètres")
-
     st.markdown("### 📌 Modèle")
     st.write(f"- Taille image : **{IMG_SIZE}×{IMG_SIZE}**")
     st.write(f"- Seuil confiance : **{CONFIDENCE_THRESHOLD:.0%}**")
-
     st.markdown("### 🧩 Classes exploitables")
-
     selected_classes = []
     for cls in ALL_CLASSES:
         if st.checkbox(cls, value=True):
             selected_classes.append(cls)
-
     if not selected_classes:
         st.warning("⚠️ Aucune classe sélectionnée")
-
     st.markdown("---")
     st.info("Application d’aide à la décision.\nValidation humaine requise.")
 
-# =========================
-# HEADER
-# =========================
 
 st.title("🧠 ANALYSE DES DEFAUTS METALLIQUES")
 st.markdown(
     "Analyse automatisée de défauts métalliques par Deep Learning",
 )
-
-# =========================
-# UPLOAD IMAGE
-# =========================
+# TELEVERSER L'IMAGE
 
 uploaded_file = st.file_uploader(
     "📤 Charger une image à analyser",
@@ -136,18 +104,13 @@ uploaded_file = st.file_uploader(
 
 image_loaded = uploaded_file is not None
 
-# =========================
 # TABS
-# =========================
 
 tab_analysis, tab_details, tab_export = st.tabs(
     ["🔍 ANALYSE", "📊 DÉTAILS", "⬇️ EXPORT"]
 )
 
-# =========================
-# IMAGE LOADING
-# =========================
-
+# IMAGE CHARGEMENT
 if image_loaded:
     file_bytes = np.asarray(bytearray(uploaded_file.read()), dtype=np.uint8)
     img_gray = cv2.imdecode(file_bytes, cv2.IMREAD_GRAYSCALE)
@@ -155,10 +118,8 @@ if image_loaded:
     if img_gray is None:
         st.error("❌ Image invalide")
         st.stop()
-
-# =========================
+        
 # TAB ANALYSE
-# =========================
 
 with tab_analysis:
     st.markdown("<div class='section-title'>🔍 Étape 1 — Analyse</div>", unsafe_allow_html=True)
@@ -205,10 +166,8 @@ with tab_analysis:
                 <p><strong>Confiance :</strong> {confidence:.2%}</p>
             </div>
             """, unsafe_allow_html=True)
-
-# =========================
+    
 # TAB DÉTAILS
-# =========================
 
 with tab_details:
     st.markdown("<div class='section-title'>📊 Étape 2 — Détails</div>", unsafe_allow_html=True)
@@ -228,11 +187,8 @@ with tab_details:
         ax.set_xlabel("Probabilité")
         ax.set_title("Distribution des probabilités")
         st.pyplot(fig)
-
-# =========================
+        
 # TAB EXPORT
-# =========================
-
 with tab_export:
     st.markdown("<div class='section-title'>⬇️ Étape 3 — Export</div>", unsafe_allow_html=True)
 
