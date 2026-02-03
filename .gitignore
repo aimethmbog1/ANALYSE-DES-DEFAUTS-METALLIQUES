@@ -1,0 +1,23 @@
+# Environnement virtuel
+venv_cnn/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Notebooks
+.ipynb_checkpoints/
+
+# Modèles entraînés
+models/
+*.h5
+*.keras
+
+# Données volumineuses (optionnel si tu ne veux pas versionner les images)
+dataset/images/
+
+# OS
+.DS_Store
+Thumbs.db
