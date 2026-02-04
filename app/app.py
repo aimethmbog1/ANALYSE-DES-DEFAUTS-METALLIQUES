@@ -69,7 +69,7 @@ st.markdown("""
 # CHARGEMENT DU MODELE
 @st.cache_resource
 def load_cnn_model():
-    model = load_model(MODEL_PATH)
+    model = load_model(MODEL_PATH, compile=False)
     assert model.input_shape == (None, IMG_SIZE, IMG_SIZE, 1)
     return model
 model = load_cnn_model()
