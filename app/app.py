@@ -69,10 +69,13 @@ st.markdown("""
 # CHARGEMENT DU MODELE
 @st.cache_resource
 def load_cnn_model():
-    model = load_model(MODEL_PATH, compile=False)
-    assert model.input_shape == (None, IMG_SIZE, IMG_SIZE, 1)
-    return model
-model = load_cnn_model()
+    try:
+        model = load_model(MODEL_PATH, compile=False)
+        return model
+    except Exception as e:
+        st.error("❌ Échec du chargement du modèle")
+        st.code(str(e))
+        raise
 
 with st.sidebar:
     st.header("⚙️ Paramètres")
