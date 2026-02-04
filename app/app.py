@@ -133,8 +133,7 @@ with tab_analysis:
         col_img, col_res = st.columns(2)
 
         with col_img:
-            st.image(img_gray, caption="Image analysée", use_container_width=True)
-
+            st.image(img_gray,caption="Image analysée",clamp=True,channels="GRAY")
         with col_res:
             with st.spinner("Analyse en cours…"):
                 img = cv2.resize(img_gray, (IMG_SIZE, IMG_SIZE))
